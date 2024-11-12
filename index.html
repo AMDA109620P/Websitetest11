@@ -51,7 +51,7 @@
             font-size: 18px;
         }
         #all-words-container {
-            display: none; /* Initially hidden */
+            display: none;
             width: 80%;
             max-width: 600px;
             background-color: #e6f3ff;
@@ -67,6 +67,12 @@
             color: #0056b3;
             text-align: center;
             margin-bottom: 15px;
+        }
+        .word-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #cce0ff;
         }
         .pagination {
             margin-top: 10px;
@@ -159,9 +165,18 @@
 
             allWordsContainer.innerHTML = "";
             pageWords.forEach(item => {
-                const div = document.createElement("div");
-                div.innerText = item.word + ": " + item.definition;
-                allWordsContainer.appendChild(div);
+                const wordDiv = document.createElement("div");
+                wordDiv.classList.add("word-item");
+
+                const wordText = document.createElement("div");
+                wordText.innerText = item.word;
+
+                const definitionText = document.createElement("div");
+                definitionText.innerText = item.definition;
+
+                wordDiv.appendChild(wordText);
+                wordDiv.appendChild(definitionText);
+                allWordsContainer.appendChild(wordDiv);
             });
         }
 
