@@ -3,114 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ศัพท์วัยรุ่น</title>
+    <title>Simple Dictionary</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             margin-top: 50px;
-            background-color: #f0f8ff;
         }
+
         h1 {
-            font-size: 2em;
-            color: #0056b3;
+            color: #007BFF;
         }
-        .box {
-            width: 80%;
-            max-width: 600px;
-            background-color: #e6f3ff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-            color: #00509e;
-        }
-        .word-header, .word-item {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 10px;
-            padding: 8px 0;
-        }
-        .word-header {
-            font-weight: bold;
-            color: #003d80;
-            border-bottom: 2px solid #b0d4ff;
-        }
+
+        #random-word,
         .word-item {
-            border-bottom: 1px solid #cce0ff;
-        }
-        .word-text {
-            font-weight: bold;
-            color: #0056b3;
-        }
-        .definition-text {
-            text-align: left;
-        }
-        #search-box {
+            font-size: 18px;
             margin: 10px;
             padding: 10px;
-            font-size: 16px;
-            width: 100%;
+            background-color: #e7f3ff;
+            border: 1px solid #007BFF;
+            border-radius: 5px;
+            width: 300px;
         }
-        button {
+
+        #search-box {
+            padding: 8px;
             margin: 10px;
-            padding: 10px 20px;
+            width: 250px;
+            border: 1px solid #007BFF;
+            border-radius: 5px;
             font-size: 16px;
-            font-weight: bold;
-            color: white;
-            background: linear-gradient(45deg, #007bff, #00c6ff);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
         }
-        .pagination {
-            margin-top: 10px;
-            font-size: 18px;
+
+        #search-results-container {
+            display: none;
+            margin-top: 20px;
+            width: 320px;
+        }
+
+        .word-text {
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        .definition-text {
+            font-style: italic;
+            color: #333;
+        }
+
+        .button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .box {
+            background-color: #f7faff;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .word-item {
             display: flex;
-            gap: 5px;
-            justify-content: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #007BFF;
+        }
+
+        .word-item:last-child {
+            border-bottom: none;
         }
     </style>
 </head>
 <body>
 
-    <h1>ศัพท์วัยรุ่น</h1>
+    <h1>Dictionary</h1>
 
-    <div id="random-word-container" class="box">
-        <div class="word-header">
-            <div>คำศัพท์</div>
-            <div>ความหมาย</div>
-        </div>
-        <div id="random-word"></div>
-    </div>
-    <button onclick="showRandomWord()">Show Random Word</button>
+    <div id="random-word" class="box">Click to see a random word</div>
+    <button onclick="showRandomWord()" class="button">Show Random Word</button>
 
-    <button onclick="toggleSearchBox()">Search Word</button>
-
-    <div id="search-box-container" style="display: none;">
+    <div id="search-results-container">
         <input type="text" id="search-box" placeholder="Search a word..." oninput="searchWord()">
-    </div>
-
-    <div id="search-results-container" class="box" style="display: none;">
-        <div class="word-header">
-            <div>คำศัพท์</div>
-            <div>ความหมาย</div>
-        </div>
         <div id="search-results"></div>
     </div>
 
-    <button onclick="toggleAllWords()">Show All Words (ก-ฮ)</button>
+    <button class="button" onclick="toggleAllWords()">Show All Words</button>
 
     <div id="all-words-container" class="box" style="display: none;">
-        <div class="word-header">
-            <div>คำศัพท์</div>
-            <div>ความหมาย</div>
-        </div>
         <div id="all-words"></div>
-        <div class="pagination" id="pagination"></div>
+        <button onclick="prevPage()" class="button">Previous</button>
+        <button onclick="nextPage()" class="button">Next</button>
     </div>
 
     <script>
@@ -128,22 +123,16 @@
             { word: "เจ๊อย่าวีน", definition: "อย่าโมโห" }
         ];
 
-        let currentPage = 1;
+        let currentPage = 0;
         const wordsPerPage = 5;
 
         function showRandomWord() {
             const randomWord = words[Math.floor(Math.random() * words.length)];
-            const randomWordContainer = document.getElementById("random-word");
-            randomWordContainer.innerHTML = `
-                <div class="word-item">
-                    <div class="word-text">${randomWord.word}</div>
-                    <div class="definition-text">${randomWord.definition}</div>
-                </div>
-            `;
+            document.getElementById("random-word").innerText = randomWord.word + ": " + randomWord.definition;
         }
 
         function searchWord() {
-            const searchTerm = document.getElementById("search-box").value.toLowerCase();
+            const searchTerm = document.getElementById("search-box").value.trim().toLowerCase();
             const results = words.filter(item => item.word.toLowerCase().startsWith(searchTerm));
             const resultContainer = document.getElementById("search-results");
             const searchResultsContainer = document.getElementById("search-results-container");
@@ -175,32 +164,20 @@
             }
         }
 
-        function toggleSearchBox() {
-            const searchBoxContainer = document.getElementById("search-box-container");
-            const isVisible = searchBoxContainer.style.display === 'block';
-            searchBoxContainer.style.display = isVisible ? 'none' : 'block';
-        }
-
         function toggleAllWords() {
             const allWordsContainer = document.getElementById("all-words-container");
-            const isVisible = allWordsContainer.style.display === 'block';
-
-            if (isVisible) {
-                allWordsContainer.style.display = 'none';
-            } else {
-                allWordsContainer.style.display = 'block';
-                renderAllWords();
-            }
+            allWordsContainer.style.display = allWordsContainer.style.display === 'none' ? 'block' : 'none';
+            showAllWords();
         }
 
-        function renderAllWords() {
+        function showAllWords() {
             const allWordsContainer = document.getElementById("all-words");
-            allWordsContainer.innerHTML = ""; // Clear existing words
-
-            const currentWords = words.slice((currentPage - 1) * wordsPerPage, currentPage * wordsPerPage);
+            const currentWords = words.slice(currentPage * wordsPerPage, (currentPage + 1) * wordsPerPage);
+            allWordsContainer.innerHTML = '';
+            
             currentWords.forEach(item => {
-                const wordDiv = document.createElement("div");
-                wordDiv.classList.add("word-item");
+                const div = document.createElement("div");
+                div.classList.add("word-item");
 
                 const wordText = document.createElement("div");
                 wordText.classList.add("word-text");
@@ -210,34 +187,24 @@
                 definitionText.classList.add("definition-text");
                 definitionText.innerText = item.definition;
 
-                wordDiv.appendChild(wordText);
-                wordDiv.appendChild(definitionText);
-                allWordsContainer.appendChild(wordDiv);
+                div.appendChild(wordText);
+                div.appendChild(definitionText);
+                allWordsContainer.appendChild(div);
             });
-
-            renderPagination();
         }
 
-        function renderPagination() {
-            const totalPages = Math.ceil(words.length / wordsPerPage);
-            const paginationContainer = document.getElementById("pagination");
-            paginationContainer.innerHTML = "";
-
-            for (let i = 1; i <= totalPages; i++) {
-                const pageButton = document.createElement("button");
-                pageButton.innerText = i;
-                pageButton.onclick = () => changePage(i);
-                if (i === currentPage) {
-                    pageButton.style.backgroundColor = '#007bff';
-                    pageButton.style.color = 'white';
-                }
-                paginationContainer.appendChild(pageButton);
+        function prevPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                showAllWords();
             }
         }
 
-        function changePage(page) {
-            currentPage = page;
-            renderAllWords();
+        function nextPage() {
+            if ((currentPage + 1) * wordsPerPage < words.length) {
+                currentPage++;
+                showAllWords();
+            }
         }
     </script>
 
