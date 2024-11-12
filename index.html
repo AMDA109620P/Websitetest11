@@ -53,6 +53,7 @@
             margin: 10px;
             padding: 10px;
             font-size: 16px;
+            width: 100%;
         }
         button {
             margin: 10px;
@@ -87,11 +88,11 @@
     </div>
     <button onclick="showRandomWord()">Show Random Word</button>
 
-    <div>
+    <button onclick="toggleSearchBox()">Search Word</button>
+
+    <div id="search-box-container" style="display: none;">
         <input type="text" id="search-box" placeholder="Search a word..." oninput="searchWord()">
     </div>
-
-    <button onclick="toggleAllWords()">Show All Words (ก-ฮ)</button>
 
     <div id="search-results-container" class="box" style="display: none;">
         <div class="word-header">
@@ -100,6 +101,8 @@
         </div>
         <div id="search-results"></div>
     </div>
+
+    <button onclick="toggleAllWords()">Show All Words (ก-ฮ)</button>
 
     <div id="all-words-container" class="box" style="display: none;">
         <div class="word-header">
@@ -170,6 +173,12 @@
             } else {
                 searchResultsContainer.style.display = 'none';
             }
+        }
+
+        function toggleSearchBox() {
+            const searchBoxContainer = document.getElementById("search-box-container");
+            const isVisible = searchBoxContainer.style.display === 'block';
+            searchBoxContainer.style.display = isVisible ? 'none' : 'block';
         }
 
         function toggleAllWords() {
