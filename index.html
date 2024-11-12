@@ -16,12 +16,12 @@
         }
         h1 {
             font-size: 2em;
-            color: #ff69b4;
+            color: #0056b3;
         }
         #random-word {
             font-size: 24px;
             margin: 20px;
-            color: #ff4500;
+            color: #00509e;
         }
         #search-box {
             margin: 10px;
@@ -34,7 +34,7 @@
             font-size: 16px;
             font-weight: bold;
             color: white;
-            background: linear-gradient(45deg, #FF5733, #FFC300, #DAF7A6, #FF33FF);
+            background: linear-gradient(45deg, #007bff, #00c6ff);
             border: none;
             border-radius: 8px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -42,7 +42,7 @@
             transition: all 0.3s ease;
         }
         button:hover {
-            background: linear-gradient(45deg, #FF33FF, #DAF7A6, #FFC300, #FF5733);
+            background: linear-gradient(45deg, #00c6ff, #007bff);
             box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
             transform: scale(1.05);
         }
@@ -53,8 +53,14 @@
         #all-words {
             font-size: 20px;
             margin-top: 20px;
-            color: #008080;
-            display: none; /* Initially hide the list */
+            color: #00509e;
+            display: none; /* Initially hidden */
+        }
+        .pagination {
+            margin-top: 10px;
+            font-size: 18px;
+            display: flex;
+            gap: 5px;
         }
     </style>
 </head>
@@ -72,6 +78,7 @@
     <button onclick="toggleAllWords()">Show All Words (ก-ฮ)</button>
     <div id="search-results"></div>
     <div id="all-words"></div>
+    <div class="pagination" id="pagination"></div>
 
     <script>
         const words = [
@@ -87,6 +94,9 @@
             { word: "บูด", definition: "ไม่ถูกใจ, ไม่ดี" },
             { word: "เจ๊อย่าวีน", definition: "อย่าโมโห" }
         ];
+
+        let currentPage = 1;
+        const itemsPerPage = 10;
 
         function showRandomWord() {
             const randomWord = words[Math.floor(Math.random() * words.length)];
@@ -112,21 +122,54 @@
 
         function toggleAllWords() {
             const allWordsContainer = document.getElementById("all-words");
+            const paginationContainer = document.getElementById("pagination");
             const isVisible = allWordsContainer.style.display === 'block';
 
             if (isVisible) {
                 allWordsContainer.style.display = 'none';
+                paginationContainer.style.display = 'none';
             } else {
-                const sortedWords = words.slice().sort((a, b) => a.word.localeCompare(b.word, 'th', { sensitivity: 'base' }));
-                allWordsContainer.innerHTML = "<h3>All Words (ก-ฮ)</h3>";
-                
-                sortedWords.forEach(item => {
-                    const div = document.createElement("div");
-                    div.innerText = item.word + ": " + item.definition;
-                    allWordsContainer.appendChild(div);
-                });
-
                 allWordsContainer.style.display = 'block';
+                paginationContainer.style.display = 'flex';
+                currentPage = 1;
+                renderAllWords();
+                renderPagination();
+            }
+        }
+
+        function renderAllWords() {
+            const allWordsContainer = document.getElementById("all-words");
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const sortedWords = words.slice().sort((a, b) => a.word.localeCompare(b.word, 'th', { sensitivity: 'base' }));
+            const pageWords = sortedWords.slice(startIndex, endIndex);
+
+            allWordsContainer.innerHTML = "<h3>All Words (ก-ฮ)</h3>";
+            pageWords.forEach(item => {
+                const div = document.createElement("div");
+                div.innerText = item.word + ": " + item.definition;
+                allWordsContainer.appendChild(div);
+            });
+        }
+
+        function renderPagination() {
+            const paginationContainer = document.getElementById("pagination");
+            paginationContainer.innerHTML = "";
+
+            const totalPages = Math.ceil(words.length / itemsPerPage);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement("button");
+                pageButton.innerText = i;
+                pageButton.onclick = () => {
+                    currentPage = i;
+                    renderAllWords();
+                };
+                if (i === currentPage) {
+                    pageButton.style.fontWeight = "bold";
+                    pageButton.style.backgroundColor = "#0056b3";
+                }
+                paginationContainer.appendChild(pageButton);
             }
         }
     </script>
