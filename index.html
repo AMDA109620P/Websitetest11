@@ -36,6 +36,7 @@
             font-size: 20px;
             margin-top: 20px;
             color: #008080;
+            display: none; /* Initially hide the list */
         }
     </style>
 </head>
@@ -50,7 +51,7 @@
         <input type="text" id="search-box" placeholder="Search a word..." oninput="searchWord()">
     </div>
 
-    <button onclick="showAllWords()">Show All Words (Sorted A-Z)</button>
+    <button onclick="toggleAllWords()">Show All Words (ก-ฮ)</button>
     <div id="search-results"></div>
     <div id="all-words"></div>
 
@@ -91,16 +92,25 @@
             }
         }
 
-        function showAllWords() {
-            const sortedWords = words.slice().sort((a, b) => a.word.localeCompare(b.word));
+        function toggleAllWords() {
             const allWordsContainer = document.getElementById("all-words");
-            allWordsContainer.innerHTML = "<h3>All Words (A-Z)</h3>";
+            const isVisible = allWordsContainer.style.display === 'block';
 
-            sortedWords.forEach(item => {
-                const div = document.createElement("div");
-                div.innerText = item.word + ": " + item.definition;
-                allWordsContainer.appendChild(div);
-            });
+            // If the words are already visible, hide them
+            if (isVisible) {
+                allWordsContainer.style.display = 'none';
+            } else {
+                const sortedWords = words.slice().sort((a, b) => a.word.localeCompare(b.word, 'th', { sensitivity: 'base' }));
+                allWordsContainer.innerHTML = "<h3>All Words (ก-ฮ)</h3>";
+                
+                sortedWords.forEach(item => {
+                    const div = document.createElement("div");
+                    div.innerText = item.word + ": " + item.definition;
+                    allWordsContainer.appendChild(div);
+                });
+
+                allWordsContainer.style.display = 'block';
+            }
         }
     </script>
 
