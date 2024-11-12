@@ -50,17 +50,30 @@
             margin-top: 20px;
             font-size: 18px;
         }
-        #all-words {
-            font-size: 20px;
+        #all-words-container {
+            display: none; /* Initially hidden */
+            width: 80%;
+            max-width: 600px;
+            background-color: #e6f3ff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
             color: #00509e;
-            display: none; /* Initially hidden */
+        }
+        #all-words-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 15px;
         }
         .pagination {
             margin-top: 10px;
             font-size: 18px;
             display: flex;
             gap: 5px;
+            justify-content: center;
         }
     </style>
 </head>
@@ -77,8 +90,11 @@
 
     <button onclick="toggleAllWords()">Show All Words (ก-ฮ)</button>
     <div id="search-results"></div>
-    <div id="all-words"></div>
-    <div class="pagination" id="pagination"></div>
+    <div id="all-words-container">
+        <div id="all-words-title">All Words (ก-ฮ)</div>
+        <div id="all-words"></div>
+        <div class="pagination" id="pagination"></div>
+    </div>
 
     <script>
         const words = [
@@ -121,16 +137,13 @@
         }
 
         function toggleAllWords() {
-            const allWordsContainer = document.getElementById("all-words");
-            const paginationContainer = document.getElementById("pagination");
+            const allWordsContainer = document.getElementById("all-words-container");
             const isVisible = allWordsContainer.style.display === 'block';
 
             if (isVisible) {
                 allWordsContainer.style.display = 'none';
-                paginationContainer.style.display = 'none';
             } else {
                 allWordsContainer.style.display = 'block';
-                paginationContainer.style.display = 'flex';
                 currentPage = 1;
                 renderAllWords();
                 renderPagination();
@@ -144,7 +157,7 @@
             const sortedWords = words.slice().sort((a, b) => a.word.localeCompare(b.word, 'th', { sensitivity: 'base' }));
             const pageWords = sortedWords.slice(startIndex, endIndex);
 
-            allWordsContainer.innerHTML = "<h3>All Words (ก-ฮ)</h3>";
+            allWordsContainer.innerHTML = "";
             pageWords.forEach(item => {
                 const div = document.createElement("div");
                 div.innerText = item.word + ": " + item.definition;
