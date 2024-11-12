@@ -31,6 +31,14 @@
         #random-word-container, #search-results-container {
             display: none;
         }
+        .word-header {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            font-weight: bold;
+            padding-bottom: 8px;
+            color: #003d80;
+            border-bottom: 2px solid #b0d4ff;
+        }
         .word-item {
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -82,6 +90,10 @@
     <h1>ศัพท์วัยรุ่น</h1>
 
     <div id="random-word-container" class="box">
+        <div class="word-header">
+            <div>คำศัพท์</div>
+            <div>ความหมาย</div>
+        </div>
         <div id="random-word"></div>
     </div>
     <button onclick="showRandomWord()">Show Random Word</button>
@@ -93,11 +105,19 @@
     <button onclick="toggleAllWords()">Show All Words (ก-ฮ)</button>
 
     <div id="search-results-container" class="box">
+        <div class="word-header">
+            <div>คำศัพท์</div>
+            <div>ความหมาย</div>
+        </div>
         <div id="search-results"></div>
     </div>
 
     <div id="all-words-container" class="box">
         <div id="all-words-title" style="font-weight:bold; font-size: 24px; color: #0056b3; text-align: center;">All Words (ก-ฮ)</div>
+        <div class="word-header">
+            <div>คำศัพท์</div>
+            <div>ความหมาย</div>
+        </div>
         <div id="all-words"></div>
         <div class="pagination" id="pagination"></div>
     </div>
@@ -125,6 +145,10 @@
             const randomWordContainer = document.getElementById("random-word-container");
             randomWordContainer.style.display = 'block';
             randomWordContainer.innerHTML = `
+                <div class="word-header">
+                    <div>คำศัพท์</div>
+                    <div>ความหมาย</div>
+                </div>
                 <div class="word-item">
                     <div class="word-text">${randomWord.word}</div>
                     <div class="definition-text">${randomWord.definition}</div>
@@ -212,20 +236,4 @@
             const totalPages = Math.ceil(words.length / itemsPerPage);
 
             for (let i = 1; i <= totalPages; i++) {
-                const pageButton = document.createElement("button");
-                pageButton.innerText = i;
-                pageButton.onclick = () => {
-                    currentPage = i;
-                    renderAllWords();
-                };
-                if (i === currentPage) {
-                    pageButton.style.fontWeight = "bold";
-                    pageButton.style.backgroundColor = "#0056b3";
-                }
-                paginationContainer.appendChild(pageButton);
-            }
-        }
-    </script>
-
-</body>
-</html>
+                const pageButton = document.create
