@@ -202,4 +202,52 @@
 
         function toggleAllWords() {
             const allWordsContainer = document.getElementById("all-words-container");
-            allWordsContainer.style.display =
+            allWordsContainer.style.display = allWordsContainer.style.display === "none" ? "block" : "none";
+            if (allWordsContainer.style.display === "block") {
+                displayWords();
+            }
+        }
+
+        function displayWords() {
+            const allWordsContainer = document.getElementById("all-words");
+            allWordsContainer.innerHTML = "";
+
+            const startIndex = currentPage * wordsPerPage;
+            const endIndex = Math.min(startIndex + wordsPerPage, words.length);
+
+            for (let i = startIndex; i < endIndex; i++) {
+                const wordItem = document.createElement("div");
+                wordItem.classList.add("word-item");
+
+                const wordText = document.createElement("div");
+                wordText.classList.add("word-text");
+                wordText.innerText = words[i].word;
+
+                const definitionText = document.createElement("div");
+                definitionText.classList.add("definition-text");
+                definitionText.innerText = words[i].definition;
+
+                wordItem.appendChild(wordText);
+                wordItem.appendChild(definitionText);
+                allWordsContainer.appendChild(wordItem);
+            }
+        }
+
+        function nextPage() {
+            if ((currentPage + 1) * wordsPerPage < words.length) {
+                currentPage++;
+                displayWords();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                displayWords();
+            }
+        }
+
+    </script>
+
+</body>
+</html>
