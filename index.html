@@ -19,15 +19,17 @@
             color: #007BFF;
         }
 
-        #random-word,
-        .word-item {
-            font-size: 18px;
+        #random-word {
+            font-size: 20px;
             margin: 10px;
-            padding: 10px;
+            padding: 15px;
             background-color: #e7f3ff;
             border: 1px solid #007BFF;
             border-radius: 5px;
             width: 300px;
+            font-weight: bold;
+            color: #007BFF;
+            text-align: center;
         }
 
         #search-box {
@@ -128,7 +130,8 @@
 
         function showRandomWord() {
             const randomWord = words[Math.floor(Math.random() * words.length)];
-            document.getElementById("random-word").innerText = randomWord.word + ": " + randomWord.definition;
+            const randomWordContainer = document.getElementById("random-word");
+            randomWordContainer.innerHTML = `<span class="word-text">${randomWord.word}</span>: <span class="definition-text">${randomWord.definition}</span>`;
         }
 
         function searchWord() {
