@@ -40,7 +40,7 @@
         }
 
         #search-results-container {
-            display: none;
+            display: block;
             margin-top: 20px;
             width: 320px;
         }
@@ -135,11 +135,9 @@
             const searchTerm = document.getElementById("search-box").value.trim().toLowerCase();
             const results = words.filter(item => item.word.toLowerCase().startsWith(searchTerm));
             const resultContainer = document.getElementById("search-results");
-            const searchResultsContainer = document.getElementById("search-results-container");
             resultContainer.innerHTML = "";
 
             if (results.length > 0) {
-                searchResultsContainer.style.display = 'block';
                 results.forEach(item => {
                     const div = document.createElement("div");
                     div.classList.add("word-item");
@@ -158,9 +156,6 @@
                 });
             } else if (searchTerm) {
                 resultContainer.innerText = "No results found.";
-                searchResultsContainer.style.display = 'block';
-            } else {
-                searchResultsContainer.style.display = 'none';
             }
         }
 
