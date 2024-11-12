@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ศัพท์วัยรุ่น</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50px;
+            background-color: #f0f8ff;
+        }
+        h1 {
+            font-size: 2em;
+            color: #ff69b4;
+        }
+        #random-word {
+            font-size: 24px;
+            margin: 20px;
+            color: #ff4500;
+        }
+        #search-box, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #search-results {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        #all-words {
+            font-size: 20px;
+            margin-top: 20px;
+            color: #008080;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>ศัพท์วัยรุ่น</h1>
+
+    <div id="random-word">Click to see a random word</div>
+    <button onclick="showRandomWord()">Show Random Word</button>
+
+    <div>
+        <input type="text" id="search-box" placeholder="Search a word..." oninput="searchWord()">
+    </div>
+
+    <button onclick="showAllWords()">Show All Words (Sorted A-Z)</button>
+    <div id="search-results"></div>
+    <div id="all-words"></div>
+
+    <script>
+        const words = [
+            { word: "อย่าหาทํา", definition: "หยุดทํา,อย่าคิดจะทํา" },
+            { word: "น่ามคาน", definition: "รําคาญ" },
+            { word: "ปล่อยจอย", definition: "ปล่อยวาง,ไม่สนใจ" },
+            { word: "แกง", definition: "แกล้ง" },
+            { word: "จบิง", definition: "จริง" },
+            { word: "ใจฟู", definition: "ดีใจ,มีความสุข" },
+            { word: "ติดแกลม", definition: "ใช้ชีวิตที่ติดหรู ติดรวย ติดความสะดวกสบาย" },
+            { word: "อย่าเล่นกับระบบ", definition: "จริงจัง,อย่าท้าทาย" },
+            { word: "อ่อม", definition: "ไม่เลิศ,รู้สึกกร่อย" },
+            { word: "บูด", definition: "ไม่ถูกใจ, ไม่ดี" },
+            { word: "เจ๊อย่าวีน", definition: "อย่าโมโห" }
+        ];
+
+        function showRandomWord() {
+            const randomWord = words[Math.floor(Math.random() * words.length)];
+            document.getElementById("random-word").innerText = randomWord.word + ": " + randomWord.definition;
+        }
+
+        function searchWord() {
+            const searchTerm = document.getElementById("search-box").value.toLowerCase();
+            const results = words.filter(item => item.word.toLowerCase().includes(searchTerm));
+            const resultContainer = document.getElementById("search-results");
+            resultContainer.innerHTML = "";
+
+            if (results.length > 0) {
+                results.forEach(item => {
+                    const div = document.createElement("div");
+                    div.innerText = item.word + ": " + item.definition;
+                    resultContainer.appendChild(div);
+                });
+            } else if (searchTerm) {
+                resultContainer.innerText = "No results found.";
+            }
+        }
+
+        function showAllWords() {
+            const sortedWords = words.slice().sort((a, b) => a.word.localeCompare(b.word));
+            const allWordsContainer = document.getElementById("all-words");
+            allWordsContainer.innerHTML = "<h3>All Words (A-Z)</h3>";
+
+            sortedWords.forEach(item => {
+                const div = document.createElement("div");
+                div.innerText = item.word + ": " + item.definition;
+                allWordsContainer.appendChild(div);
+            });
+        }
+    </script>
+
+</body>
+</html>
