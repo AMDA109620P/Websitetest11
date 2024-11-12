@@ -133,12 +133,18 @@
 
         function searchWord() {
             const searchTerm = document.getElementById("search-box").value.trim().toLowerCase();
-            const results = words.filter(item => item.word.toLowerCase().startsWith(searchTerm));
-            const resultContainer = document.getElementById("search-results");
-            resultContainer.innerHTML = "";
+            const results = document.getElementById("search-results");
+            results.innerHTML = "";
 
-            if (results.length > 0) {
-                results.forEach(item => {
+            if (searchTerm === "") {
+                results.innerHTML = ""; // Don't show any results if the search is empty
+                return;
+            }
+
+            const filteredResults = words.filter(item => item.word.toLowerCase().startsWith(searchTerm));
+
+            if (filteredResults.length > 0) {
+                filteredResults.forEach(item => {
                     const div = document.createElement("div");
                     div.classList.add("word-item");
 
@@ -152,10 +158,10 @@
 
                     div.appendChild(wordText);
                     div.appendChild(definitionText);
-                    resultContainer.appendChild(div);
+                    results.appendChild(div);
                 });
-            } else if (searchTerm) {
-                resultContainer.innerText = "No results found.";
+            } else {
+                results.innerText = "No results found.";
             }
         }
 
@@ -169,7 +175,7 @@
             const allWordsContainer = document.getElementById("all-words");
             const currentWords = words.slice(currentPage * wordsPerPage, (currentPage + 1) * wordsPerPage);
             allWordsContainer.innerHTML = '';
-            
+
             currentWords.forEach(item => {
                 const div = document.createElement("div");
                 div.classList.add("word-item");
