@@ -18,10 +18,32 @@
             font-size: 2em;
             color: #0056b3;
         }
-        #random-word {
-            font-size: 24px;
-            margin: 20px;
+        .box {
+            width: 80%;
+            max-width: 600px;
+            background-color: #e6f3ff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
             color: #00509e;
+        }
+        #random-word-container, #search-results-container {
+            display: none;
+        }
+        .word-item {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 10px;
+            padding: 5px 0;
+            border-bottom: 1px solid #cce0ff;
+        }
+        .word-text {
+            font-weight: bold;
+            color: #0056b3;
+        }
+        .definition-text {
+            text-align: left;
         }
         #search-box {
             margin: 10px;
@@ -46,42 +68,6 @@
             box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
             transform: scale(1.05);
         }
-        #search-results {
-            margin-top: 20px;
-            font-size: 18px;
-        }
-        #all-words-container {
-            display: none;
-            width: 80%;
-            max-width: 600px;
-            background-color: #e6f3ff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-            color: #00509e;
-        }
-        #all-words-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #0056b3;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        .word-item {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 10px;
-            padding: 5px 0;
-            border-bottom: 1px solid #cce0ff;
-        }
-        .word-text {
-            font-weight: bold;
-            color: #0056b3;
-        }
-        .definition-text {
-            text-align: left;
-        }
         .pagination {
             margin-top: 10px;
             font-size: 18px;
@@ -95,7 +81,9 @@
 
     <h1>ศัพท์วัยรุ่น</h1>
 
-    <div id="random-word">Click to see a random word</div>
+    <div id="random-word-container" class="box">
+        <div id="random-word"></div>
+    </div>
     <button onclick="showRandomWord()">Show Random Word</button>
 
     <div>
@@ -103,9 +91,13 @@
     </div>
 
     <button onclick="toggleAllWords()">Show All Words (ก-ฮ)</button>
-    <div id="search-results"></div>
-    <div id="all-words-container">
-        <div id="all-words-title">All Words (ก-ฮ)</div>
+
+    <div id="search-results-container" class="box">
+        <div id="search-results"></div>
+    </div>
+
+    <div id="all-words-container" class="box">
+        <div id="all-words-title" style="font-weight:bold; font-size: 24px; color: #0056b3; text-align: center;">All Words (ก-ฮ)</div>
         <div id="all-words"></div>
         <div class="pagination" id="pagination"></div>
     </div>
@@ -130,23 +122,46 @@
 
         function showRandomWord() {
             const randomWord = words[Math.floor(Math.random() * words.length)];
-            document.getElementById("random-word").innerText = randomWord.word + ": " + randomWord.definition;
+            const randomWordContainer = document.getElementById("random-word-container");
+            randomWordContainer.style.display = 'block';
+            randomWordContainer.innerHTML = `
+                <div class="word-item">
+                    <div class="word-text">${randomWord.word}</div>
+                    <div class="definition-text">${randomWord.definition}</div>
+                </div>
+            `;
         }
 
         function searchWord() {
             const searchTerm = document.getElementById("search-box").value.toLowerCase();
             const results = words.filter(item => item.word.toLowerCase().includes(searchTerm));
             const resultContainer = document.getElementById("search-results");
+            const searchResultsContainer = document.getElementById("search-results-container");
             resultContainer.innerHTML = "";
 
             if (results.length > 0) {
+                searchResultsContainer.style.display = 'block';
                 results.forEach(item => {
                     const div = document.createElement("div");
-                    div.innerText = item.word + ": " + item.definition;
+                    div.classList.add("word-item");
+
+                    const wordText = document.createElement("div");
+                    wordText.classList.add("word-text");
+                    wordText.innerText = item.word;
+
+                    const definitionText = document.createElement("div");
+                    definitionText.classList.add("definition-text");
+                    definitionText.innerText = item.definition;
+
+                    div.appendChild(wordText);
+                    div.appendChild(definitionText);
                     resultContainer.appendChild(div);
                 });
             } else if (searchTerm) {
                 resultContainer.innerText = "No results found.";
+                searchResultsContainer.style.display = 'block';
+            } else {
+                searchResultsContainer.style.display = 'none';
             }
         }
 
