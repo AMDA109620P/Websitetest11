@@ -125,6 +125,9 @@
             { word: "เจ๊อย่าวีน", definition: "อย่าโมโห" }
         ];
 
+        let currentPage = 1;
+        const wordsPerPage = 5;
+
         function showRandomWord() {
             const randomWord = words[Math.floor(Math.random() * words.length)];
             const randomWordContainer = document.getElementById("random-word");
@@ -138,7 +141,7 @@
 
         function searchWord() {
             const searchTerm = document.getElementById("search-box").value.toLowerCase();
-            const results = words.filter(item => item.word.toLowerCase().includes(searchTerm));
+            const results = words.filter(item => item.word.toLowerCase().startsWith(searchTerm));
             const resultContainer = document.getElementById("search-results");
             const searchResultsContainer = document.getElementById("search-results-container");
             resultContainer.innerHTML = "";
@@ -184,7 +187,9 @@
         function renderAllWords() {
             const allWordsContainer = document.getElementById("all-words");
             allWordsContainer.innerHTML = ""; // Clear existing words
-            words.forEach(item => {
+
+            const currentWords = words.slice((currentPage - 1) * wordsPerPage, currentPage * wordsPerPage);
+            currentWords.forEach(item => {
                 const wordDiv = document.createElement("div");
                 wordDiv.classList.add("word-item");
 
@@ -200,6 +205,30 @@
                 wordDiv.appendChild(definitionText);
                 allWordsContainer.appendChild(wordDiv);
             });
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(words.length / wordsPerPage);
+            const paginationContainer = document.getElementById("pagination");
+            paginationContainer.innerHTML = "";
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement("button");
+                pageButton.innerText = i;
+                pageButton.onclick = () => changePage(i);
+                if (i === currentPage) {
+                    pageButton.style.backgroundColor = '#007bff';
+                    pageButton.style.color = 'white';
+                }
+                paginationContainer.appendChild(pageButton);
+            }
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            renderAllWords();
         }
     </script>
 
