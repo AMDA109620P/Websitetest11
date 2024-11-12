@@ -23,10 +23,28 @@
             margin: 20px;
             color: #ff4500;
         }
-        #search-box, button {
+        #search-box {
             margin: 10px;
             padding: 10px;
             font-size: 16px;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(45deg, #FF5733, #FFC300, #DAF7A6, #FF33FF);
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(45deg, #FF33FF, #DAF7A6, #FFC300, #FF5733);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
         }
         #search-results {
             margin-top: 20px;
@@ -96,7 +114,6 @@
             const allWordsContainer = document.getElementById("all-words");
             const isVisible = allWordsContainer.style.display === 'block';
 
-            // If the words are already visible, hide them
             if (isVisible) {
                 allWordsContainer.style.display = 'none';
             } else {
