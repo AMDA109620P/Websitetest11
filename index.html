@@ -124,25 +124,183 @@
 
     <h1>Subwailun</h1>
 
-    <div id="random-word" class="box">คลิกเพื่อดูคำแบบสุ่ม</div>
-    <button onclick="showRandomWord()" class="button">แสดงคำแบบสุ่ม</button>
+    <div id="random-word" class="box">Click to see a random word</div>
+    <button onclick="showRandomWord()" class="button">Show Random Word</button>
 
     <div id="search-results-container">
-        <input type="text" id="search-box" placeholder="ค้นหาคำ..." oninput="searchWord()">
+        <input type="text" id="search-box" placeholder="Search a word..." oninput="searchWord()">
         <div id="search-results"></div>
     </div>
 
-    <button class="button" onclick="toggleAllWords()">แสดงคำทั้งหมด</button>
+    <button class="button" onclick="toggleAllWords()">Show All Words</button>
 
     <div id="all-words-container" class="box" style="display: none;">
         <div id="all-words"></div>
-        <button onclick="prevPage()" class="button">ก่อนหน้า</button>
-        <button onclick="nextPage()" class="button">ถัดไป</button>
+        <button onclick="prevPage()" class="button">Previous</button>
+        <button onclick="nextPage()" class="button">Next</button>
     </div>
 
     <script>
-        // JavaScript content stays the same as before
+        const words = [
+{ word: "บรรทุก", definition: "กินเกินอัตรา" },
+{ word: "บริสุทธิ์", definition: "สาวบริสุทธิ์" },
+{ word: "บวก", definition: "ชก" },
+{ word: "บวบ", definition: "อวัยวะเพศชาย" },
+{ word: "บอมบ์", definition: "กองอุจจาระ" },
+{ word: "บ๋อย", definition: "บริกรชาย" },
+{ word: "บึ้ม", definition: "ระเบิด" },
+{ word: "บูด", definition: "แย่" },
+{ word: "บูม", definition: "เป็นที่รู้จัก,โจษขานไปทั่ว" },
+{ word: "เบ๊", definition: "ผู้รับใช้,ผู้ยอมรับใช้" },
+{ word: "เบรกแตก", definition: "ทำเรื่อยไปไม่หยุด" },
+{ word: "เบอร์", definition: "ขนาด" },
+{ word: "เบ๊อะ", definition: "เปิ่น" },
+{ word: "เบ้าหน้า", definition: "ลักษณะโครงหน้า" },
+{ word: "เบียด", definition: "แต่งงาน,มีคู่ครอง" },
+{ word: "เบียว", definition: "หลงใหล,หมกมุ่นในพฤติกรรมบางอย่างที่ตนแสร้งทำ" },
+{ word: "แบน", definition: "ระงับ,ห้าม,คว่ำบาตร" },
+{ word: "โบ", definition: "ดูโบราณ,ไม่ทันสมัย" },
+{ word: "โบ้", definition: "หมา" },
+{ word: "ใบไม้ร่าเริง", definition: "กัญชา" },
+{ word: "ใบหญ้าร่าเริง", definition: "กัญชา" },
+            { word: "อย่าหาทํา", definition: "หยุดทํา,อย่าคิดจะทํา" },
+            { word: "น่ามคาน", definition: "รําคาญ" },
+            { word: "ปล่อยจอย", definition: "ปล่อยวาง,ไม่สนใจ" },
+            { word: "สุดตีน", definition: "ที่สุดของที่สุด" },
+            { word: "หมาต๋า", definition: "ตํารวจ" },
+            { word: "อสกข", definition: "(ย่อมาจากไอ้สัสกูขํา) ความหมาย:หัวเราะ/เยาะเย้ย" },
+            { word: "อะโบะจามะ", definition: "อวัยวะเพศ" },
+            { word: "อารามบอย", definition: "เด็กวัด" },
+            { word: "เอิ๊กๆ", definition: "หัวเราะเชิงเสียดสี" },
+            { word: "เฮีย", definition: "เหี้ย" },
+            { word: "แกง", definition: "แกล้ง" },
+            { word: "จบิง", definition: "จริง" },
+            { word: "ใจฟู", definition: "ดีใจ,มีความสุข" },
+            { word: "น้ำลำไย", definition: "เบียร์" },
+            { word: "บะหมี่", definition: "กะหรี่, โสเภณี" },
+            { word: "บัญชีหนังหมา", definition: "ประวัติอาชญากรรม,บัญชีดํา " },
+            { word: "ประชาชี", definition: "ประชาชนทั่วไป" },
+            { word: "ปีเตอร์", definition: "แมลงสาบ" },
+            { word: "นอยด์อะ", definition: "รู้สึกไม่ดี, น้อยใจ,    รู้สึกแย่" },
+            { word: "อย่ามาเรา", definition: "เราไม่มีอะไรเกี่ยวข้องกัน" },
+            { word: "เหียก", definition: "น่าเกลียด,ขี้เหร่" },
+            { word: "ให้ว่อง", definition: "เร็วๆ" },
+            { word: "แอ๊บ", definition: "แกล้งทํา" },
+            { word: "เอ้าท์", definition: "ตกกระแส" },
+            { word: "แอบหงิม", definition: "แกล้งทําตัวเรียบร้อย" },
+            { word: "โอโม่", definition: "ใช้เรียกผู้หญิงที่ขาวมากๆ" },
+            { word: "ไฮเปอร์โบลา", definition: "ชอบทําตัวไม่เหมือนคนอื่น" },
+            { word: "โฮก", definition: "ตกใจ, ตะลึงมาก" },
+            { word: "สิ่งอัน", definition: "ทุกสิ่งทุกอย่าง" },
+            { word: "สะแอ๋ง", definition: "ชอบสอดเรื่องชาวบ้าน" },
+            { word: "ล้านแปด", definition: "ผู้คนเยอะไปหมด" },
+            { word: "รั่ว", definition: "ท่าทางออกแนวบ้าๆ" },
+            { word: "มิได้นําพา", definition: "ไม่ได้คล้อยตาม" },
+            { word: "เพียวเค็ม", definition: "คนที่งกมากๆ" },
+            { word: "มือฝรั่ง", definition: "เท้า, ตีน" },
+            { word: "วิก", definition: "สถานีโทรทัศน์, โรงมหรสรรพ" },
+            { word: "ติดแกลม", definition: "ใช้ชีวิตที่ติดหรู ติดรวย ติดความสะดวกสบาย" },
+            { word: "อย่าเล่นกับระบบ", definition: "จริงจัง,อย่าท้าทาย" },
+            { word: "อ่อม", definition: "ไม่เลิศ,รู้สึกกร่อย" },
+            { word: "บูด", definition: "ไม่ถูกใจ, ไม่ดี" },
+            { word: "เจ๊อย่าวีน", definition: "อย่าโมโห" }
+        ];
+
+        let currentPage = 0;
+        const wordsPerPage = 5;
+
+        function showRandomWord() {
+            const randomWord = words[Math.floor(Math.random() * words.length)];
+            const randomWordContainer = document.getElementById("random-word");
+            randomWordContainer.innerHTML = `<span class="word-text">${randomWord.word}</span>: <span class="definition-text">${randomWord.definition}</span>`;
+        }
+
+        function searchWord() {
+            const searchTerm = document.getElementById("search-box").value.trim().toLowerCase();
+            const results = document.getElementById("search-results");
+            results.innerHTML = "";
+
+            if (searchTerm === "") {
+                results.innerHTML = ""; // Don't show any results if the search is empty
+                return;
+            }
+
+            // Modified search logic to check if the word contains the search term
+            const filteredResults = words.filter(item => item.word.toLowerCase().includes(searchTerm));
+
+            if (filteredResults.length > 0) {
+                results.style.display = "block"; // Show the results box
+                filteredResults.forEach(item => {
+                    const div = document.createElement("div");
+                    div.classList.add("result-item");
+
+                    const wordText = document.createElement("div");
+                    wordText.classList.add("word-text");
+                    wordText.innerText = item.word;
+
+                    const definitionText = document.createElement("div");
+                    definitionText.classList.add("definition-text");
+                    definitionText.innerText = item.definition;
+
+                    div.appendChild(wordText);
+                    div.appendChild(definitionText);
+                    results.appendChild(div);
+                });
+            } else {
+                results.style.display = "none"; // Hide the results box if no results found
+            }
+        }
+
+        function toggleAllWords() {
+            const allWordsContainer = document.getElementById("all-words-container");
+            allWordsContainer.style.display = allWordsContainer.style.display === "none" ? "block" : "none";
+            if (allWordsContainer.style.display === "block") {
+                displayWords();
+            }
+        }
+
+        function displayWords() {
+            const allWordsContainer = document.getElementById("all-words");
+            allWordsContainer.innerHTML = "";
+
+            const startIndex = currentPage * wordsPerPage;
+            const endIndex = Math.min(startIndex + wordsPerPage, words.length);
+
+            for (let i = startIndex; i < endIndex; i++) {
+                const wordItem = document.createElement("div");
+                wordItem.classList.add("word-item");
+
+                const wordText = document.createElement("div");
+                wordText.classList.add("word-text");
+                wordText.innerText = words[i].word;
+
+                const definitionText = document.createElement("div");
+                definitionText.classList.add("definition-text");
+                definitionText.innerText = words[i].definition;
+
+                wordItem.appendChild(wordText);
+                wordItem.appendChild(definitionText);
+                allWordsContainer.appendChild(wordItem);
+            }
+        }
+
+        function nextPage() {
+            if ((currentPage + 1) * wordsPerPage < words.length) {
+                currentPage++;
+                displayWords();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                displayWords();
+            }
+        }
+
     </script>
 
 </body>
 </html>
+
+เปลี่ยน click to see a random word เป็นภาษาไทย Show Random Word ด้วย Search a word ด้วย show all words previous nextด้วย
